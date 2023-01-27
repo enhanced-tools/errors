@@ -14,8 +14,8 @@ func (t Type) MapFormatter() map[string]interface{} {
 	}
 }
 
-func (t Type) InUserResponse() bool {
-	return true
+func (t Type) Verbosity() int {
+	return 0
 }
 
 const (
