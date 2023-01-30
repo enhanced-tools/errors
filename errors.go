@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto/md5"
 	"fmt"
+	"reflect"
 	"unsafe"
 
 	"github.com/google/uuid"
@@ -52,6 +53,8 @@ type EnhancedError interface {
 	GetInternalError() error
 	// GetOpts returns the options of the error.
 	GetOpts() map[ErrorOptType]ErrorOpt
+	// GetOpt sets error opt value
+	GetOpt(opt ErrorOpt) bool
 	// GetErrorID returns the error ID of the error.
 	GetErrorID() string
 }
@@ -240,6 +243,20 @@ func (e enhancedError) GetInternalError() error {
 
 func (e enhancedError) GetOpts() map[ErrorOptType]ErrorOpt {
 	return copyOpts(e.Opts)
+}
+
+func (e enhancedError) GetOpt(opt ErrorOpt) bool {
+	value, ok := e.GetOpts()[(opt).Type()]
+	if !ok {
+		return false
+	}
+	v := reflect.ValueOf(opt)
+	if v.Kind() != reflect.Ptr {
+		panic("opt must be a pointer")
+	}
+	v = v.Elem()
+	v.Set(reflect.ValueOf(value))
+	return false
 }
 
 func (e enhancedError) GetErrorID() string {
