@@ -166,6 +166,9 @@ func (e enhancedError) Log(loggers ...LogName) {
 }
 
 func (e enhancedError) Is(err error) bool {
+	if err == nil {
+		return false
+	}
 	if errn, ok := err.(*enhancedError); ok {
 		if errn.TemplateID != "" {
 			return e.TemplateID == errn.TemplateID
