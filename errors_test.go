@@ -16,6 +16,13 @@ func TestNewf(t *testing.T) {
 	assert.Equal(t, "t 1", msg)
 }
 
+func TestGetOption(t *testing.T) {
+	var title opts.Title
+	err := errors.Newf("%s %d", "t", 1).With(opts.Title("title"))
+	err.GetOpt(&title)
+	assert.Equal(t, opts.Title("title"), title)
+}
+
 func TestTemplateIs2Enhanced(t *testing.T) {
 	err := errors.Template()
 	err1 := err.FromEmpty()
@@ -58,6 +65,6 @@ func TestLogFMTError(t *testing.T) {
 		errors.WithStackTraceFormatter(errors.NoStackTrace),
 		errors.WithSaveStack(true),
 	))
-	enhanced := errors.Enhance(err).With(opts.Debug("Natalia"), opts.Title("Kwiatkowska"), opts.Description("is a good"))
+	enhanced := errors.Enhance(err).With(opts.Debug("John"), opts.Title("Smoth"))
 	enhanced.Log()
 }
