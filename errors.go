@@ -259,7 +259,7 @@ func (e enhancedError) GetOpt(opt ErrorOpt) bool {
 	}
 	v = v.Elem()
 	v.Set(reflect.ValueOf(value))
-	return false
+	return true
 }
 
 func (e enhancedError) GetErrorID() string {
