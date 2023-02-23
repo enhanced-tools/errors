@@ -59,10 +59,12 @@ type EnhancedError interface {
 	GetErrorID() string
 }
 
-func copyOpts(opts map[ErrorOptType]ErrorOpt) map[ErrorOptType]ErrorOpt {
+func copyOpts(optSets ...map[ErrorOptType]ErrorOpt) map[ErrorOptType]ErrorOpt {
 	targetOpts := make(map[ErrorOptType]ErrorOpt)
-	for k, v := range opts {
-		targetOpts[k] = v
+	for _, opts := range optSets {
+		for k, v := range opts {
+			targetOpts[k] = v
+		}
 	}
 	return targetOpts
 }
@@ -137,7 +139,7 @@ func (e enhancedError) From(err error) EnhancedError {
 			ErrorID:    uuid.NewString(),
 			TemplateID: e.TemplateID,
 			error:      enErr.error,
-			Opts:       copyOpts(e.Opts),
+			Opts:       copyOpts(e.Opts, enErr.Opts),
 		}
 	}
 	return &enhancedError{
